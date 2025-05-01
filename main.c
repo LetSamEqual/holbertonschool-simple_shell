@@ -19,7 +19,6 @@ char **handle_input(void)
 	if (input_len == -1)
 	{
 		printf("\nExited program\n"); 
-		free(args);
 		free(buffer);
 	}
 
@@ -32,11 +31,17 @@ char **handle_input(void)
 
 char *get_path(char **args)
 {
-	char path[20] = "/bin/";
-	int i, j;
+	char *path;
+	int i, j, len;
 
 	if (args[0][0] == '/')
 		return (args[0]);
+
+	while (args[0][len])
+		len++;
+
+	path = malloc(5 + len + 1);
+	path = "/bin/";
 
 	for (i = 5, j = 0; args[0][j]; i++, j++)
 	{
@@ -58,7 +63,6 @@ void run_command(char *path, char **args, char **env)
 		execve(path, args, env);
 	perror("You've entered an invalid command dummy :( \n");
 }
-
 
 int main(void)
 {
@@ -89,12 +93,9 @@ int main(void)
 		free(buffer);
 		return (0);
 	}
-
-	if (buffer[input_len - 1] == '\n')
-		buffer[input_len - 1] = '\0';
+	buffer[input_len - 1] = '\0';
 
 	args = arg_splitter(buffer);
-	free(buffer);
 
 	for (i = 5, j = 0; args[0][j]; i++, j++)
 	{
