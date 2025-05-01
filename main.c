@@ -25,39 +25,45 @@ char **handle_input(void)
 	buffer[input_len - 1] = '\0';
 
 	args = arg_splitter(buffer);
-	free(buffer);
 	return (args);
 }
 
-char *get_path(char **args)
+char *get_path(char *args)
 {
 	char *path;
+	char *default_path = "/bin/";
 	int i, j, len;
 
-	if (args[0][0] == '/')
-		return (args[0]);
+	len = 0;
 
-	while (args[0][len])
+	while (args[len])
 		len++;
 
 	path = malloc(5 + len + 1);
-	path = "/bin/";
-
-	for (i = 5, j = 0; args[0][j]; i++, j++)
+	
+	if (!path)
 	{
-		path[i] = args[0][j];
+		perror("Failed to allocate memory for path");
+		return (NULL);
+	}
+
+	for (i = 0; i < 5; i++)
+		path[i] = default_path[i];
+
+	for (i = 5, j = 0; args[j]; i++, j++)
+	{
+		path[i] = args[j];
 	}
 
 	path[i] = '\0';
-
 	return (path);
 }
 
 void run_command(char *path, char **args, char **env)
 {
-	if (strcmp(args[1], "env"))
+	if (strcmp(args[0], "env") == 0)
 		_getenv();
-	else if (strcmp(args[1], "exit"))
+	else if (strcmp(args[0], "exit") == 0)
 		return;
 	else
 		execve(path, args, env);
@@ -66,48 +72,23 @@ void run_command(char *path, char **args, char **env)
 
 int main(void)
 {
-	char *buffer;
-	size_t buf_size = 100;
-	int input_len;
 	int children = -1;
-	char path[20] = "/bin/";
-	char **args = {NULL};
+	char *path;
+	char **args;
 	char **env = {NULL};
 	pid_t id;
-	int i, j;
 	
-	buffer = malloc(buf_size);
-	if (!buffer)
-	{
-		perror("failed to allocate memory for buffer");
-		return (0);
-	}
-
 	printf("\njanky shell $ ");
-	input_len = getline(&buffer, &buf_size, stdin);
-
-	if (input_len == -1)
-	{
-		printf("\nExited program\n"); 
-		free(args);
-		free(buffer);
-		return (0);
-	}
-	buffer[input_len - 1] = '\0';
-
-	args = arg_splitter(buffer);
-
-	for (i = 5, j = 0; args[0][j]; i++, j++)
-	{
-		path[i] = args[0][j];
-	}
-
-	path[i] = '\0';
+	args = handle_input();
+	if (args[0][0] == '/')
+		path = args[0];
+	else
+		path = get_path(args[0]);
 
 	id = fork();
 
 	if (id == 0)
-		execve(path, args, env);
+		run_command(path, args, env);
 	else
 	{
 		wait(&children);
