@@ -10,5 +10,6 @@
 extern char **environ;
 
 char **arg_splitter(char *input);
+void _getenv(void);
 
 #endif
