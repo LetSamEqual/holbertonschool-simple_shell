@@ -4,7 +4,6 @@
  * handle_input - Reads a command from the user
  *
  * Return: array of args if succesful or null if not
- */
 
 char **handle_input(void)
 {
@@ -36,12 +35,10 @@ char **handle_input(void)
 	return (args);
 }
 
-/**
  * get_path - returns absolute path to bin folder
  * @args: first arg in array of arg pointing to first command user entered
  *
  * Return: path to bin folder
- */
 
 char *get_path(char *args)
 {
@@ -77,14 +74,12 @@ char *get_path(char *args)
 	return (path);
 }
 
-/**
  * run_command - runs command entered by user
  * @path: path to bin folder
  * @args: array of commands from user
  * @env: env variables passed from user
  *
  * Return: void
- */
 
 void run_command(char *path, char **args, char **env)
 {
@@ -94,21 +89,7 @@ void run_command(char *path, char **args, char **env)
 		execve(path, args, env);
 	perror("something's gone horribly wrong :( \n");
 }
-
-/**
- * free_args - frees memory
- * @args: array of args passed by user
- *
- * Return: void
- */
-
-void free_args(char **args)
-{
-	int i;
-
-	for (i = 0; args[i]; i++)
-		free(args[i]);
-}
+*/
 
 /**
  * main - entry point
@@ -131,11 +112,10 @@ int main(void)
 			printf("\njanky shell $ ");
 		args = handle_input();
 		if (!args)
-		{
 			return (1);
-		}
 		if (strcmp(args[0], "exit") == 0)
 		{
+			free(args);
 			return (0);
 		}
 		path = get_path(args[0]);
@@ -151,6 +131,9 @@ int main(void)
 			else
 				wait(&children);
 		}
+		free(path);
+		free(args[0]);
+		free(args);
 	}
 	return (0);
 }
