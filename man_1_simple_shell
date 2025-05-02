@@ -1,3 +1,28 @@
-# man page for our simple shell
+# Janky Shell™man page
 
+NAME
+	Janky Shell - a UNIX Shell look-alike
 
+SYNOPSIS
+	Janky Shell is a custom-built shell, designed to mirror some of the features contained in the UNIX Shell program. It was built as the final project in the C component of Holberton's Software Engineering course.
+
+DESCRIPTION
+	Janky Shell immitates most of the basic features of the Shell program, including:
+	- system calls
+	- system calls with arguments
+	- the exit and env built-in commands
+	- support for interactive and non-interactive modes
+
+OPTIONS
+	Some of the commands on offer include:
+	- mkdir: create a folder in the current directory
+	- ls (-l, -a, etc): lists all folders and files in current directory
+	- rm: deletes specified file
+	- env: prints user's current environment to stdout
+	Janky Shell can also be used in non-interactive mode. For example, echo "ls" | ./hsh will pipe the 'ls' command into Janky Shell, resulting in a list of all files and folders in the current directory being printed to stdout.
+
+BUGS
+	Non-detected
+
+AUTHORS
+	Sam Henderson
