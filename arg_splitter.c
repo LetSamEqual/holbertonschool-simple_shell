@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * arg_splitter - splits user input into array of args
+ * @input: string of user input
+ *
+ * Return: array of args
+ */
+
 char **arg_splitter(char *input)
 {
 	char **token_array;
@@ -20,7 +27,7 @@ char **arg_splitter(char *input)
 		token_array[i] = token;
 		token = strtok(NULL, " ");
 	}
-	
+
 	token_array[i] = NULL;
 
 	return (token_array);
