@@ -20,6 +20,7 @@ char **handle_input(void)
 	{
 		printf("\nExited program\n"); 
 		free(buffer);
+		return (NULL);
 	}
 
 	buffer[input_len - 1] = '\0';
@@ -76,14 +77,26 @@ int main(void)
 	char *path;
 	char **args;
 	char **env = {NULL};
-	pid_t id;
-	
+	pid_t id;	
+	struct stat st;
+
 	printf("\njanky shell $ ");
 	args = handle_input();
-	if (args[0][0] == '/')
+	if (!args)
+		return (1);
+	if (strncmp(args[0], "/bin/", 5) == 0)
 		path = args[0];
+	else if (strcmp(args[0], "exit") == 0)
+		return (0);
 	else
 		path = get_path(args[0]);
+
+	if (stat(path, &st) != 0)
+	{
+		perror("You've entered an invalid command dummy :( \n");
+		main();
+		return (0);
+	}
 
 	id = fork();
 
