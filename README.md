@@ -30,3 +30,4 @@ Greater detail about the commands available to users of Janky Shell can be found
 
 ### Authors
 Sam Henderson
+Anthony Hoang
